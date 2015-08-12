@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html ng-app="app">
+
+<head>
+<script src="../bower_components/angular/angular.js"></script>
+<script src="../bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+<script src="../bower_components/ui-router/release/angular-ui-router.js"></script>
+<script src="../src/uiRouterYesNoCancel.js"></script>
+<script src="demo.js"></script>
+<link href="../bower_components/bootstrap-css/css/bootstrap.css" rel="stylesheet">
+<style>
+.ng-dirty{
+  background: yellow;
+}
+</style>
+</head>
+
+<body ng-controller="MainCtrl">
+
+  <ui-view></ui-view>
+
+</body>
+
+</html>

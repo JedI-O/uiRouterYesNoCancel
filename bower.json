@@ -1,0 +1,35 @@
+{
+  "name": "uiRouterYesNoCancel",
+  "version": "0.0.1",
+  "homepage": "https://github.com/madcowpp/uiRouterYesNoCancel",
+  "authors": [
+    "Paul Podlech <podlech@daz-services.de>"
+  ],
+  "description": "Service module for ui.router. Let's you watch for certain state changes, waits for confirmation and executes/routes depending on confirmation result.",
+  "main": "dist/uiRouterYesNoCancel.min.js",
+  "moduleType": [
+    "globals"
+  ],
+  "keywords": [
+    "ui.router",
+    "confirmation",
+    "confirm",
+    "routing",
+    "saving",
+    "intercept"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "~1.4.3",
+    "ui-router": "~0.2.15",
+    "angular-bootstrap": "~0.13.3",
+    "bootstrap-css": "~3.3.4"
+  }
+}
