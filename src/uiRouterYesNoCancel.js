@@ -4,14 +4,13 @@
 
   /* Run the initialization.
    * Injecting uiRouterYesNoCancel service here
-   * registers the registerList collected by the provider.
+   * registers the registerList collected by the provider in config phase.
    */
   yesNoCancel.run(['uiRouterYesNoCancel', '$rootScope', '$modal', '$state', '$q', function(a, $rootScope, $modal, $state, $q){
       var proceed = function(fromState, toState, toParams){
-        return function(){
           fromState.uiRouterYesNoCancel.allowRouting = true; $state.go(toState, toParams);
-        }
       };
+
       /* on $stateChangeStart */
       $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams){
         /* check if routing is allowed. */
@@ -21,35 +20,50 @@
         /* if not allowed:  */
         event.preventDefault();
 
-        /* set up the $modal  settings and open the modal*/
-        var modalHtml = '<div class="modal-body">' + fromState.uiRouterYesNoCancel.message + '</div>' + '<div class="modal-footer"><button class="btn btn-primary" ng-click="yes()">Yes</button><button class="btn btn-primary" ng-click="no()">No</button><button class="btn btn-warning" ng-click="cancel()">Cancel</button></div>';
+        var scope;
+        var deferred = $q.defer();
 
-        var modalInstance = $modal.open({
-          template: modalHtml,
-          controller: function($scope, $modalInstance) {
-            $scope.yes = function() {
-              $modalInstance.close(0);
-            };
-            $scope.no = function() {
-              $modalInstance.close(1);
-            };
-            $scope.cancel = function() {
-              $modalInstance.dismiss();
-            };
-          }
+        var modalCtrl = ['$scope', function($scope){
+          $scope.message = fromState.uiRouterYesNoCancel.message;
+          scope=$scope;
+          $scope.disabled = false;
+          $scope.yes = function(){
+            $scope.disabled = true;
+            $q.when(fromState.uiRouterYesNoCancel.yes()).then(function(){
+              deferred.resolve();
+            });
+          };
+          $scope.no = function(){
+            $scope.disabled = true;
+            $q.when(fromState.uiRouterYesNoCancel.no()).then(function(){
+              deferred.resolve();
+            });
+          };
+        }];
+
+        deferred.promise.then(function(){
+          scope.$close();
         });
 
+        /* set up the $modal  settings and open the modal*/
+        var modalHtml = '<div class="modal-body">{{message}}</div>'+
+        '<div class="modal-footer"><button ng-disabled="disabled" class="btn btn-primary" ng-click="yes()">Yes</button>'+
+        '<button ng-disabled="disabled" class="btn btn-primary" ng-click="no()">No</button><button class="btn btn-warning" ng-click="$dismiss()">Cancel</button></div>';
+
+        var modalInstance = $modal.open({
+            template: modalHtml,
+            controller: modalCtrl
+          });
+
         /* the result promise is resolved when the modalInstance closes or is dismissed */
-        modalInstance.result.then(function(result){
-          /* I close, it's closed by yes or no button.
-           * So call the appropriate functions and then route.
+        modalInstance.result.then(function(){
+          /* If closed, it's closed by yes or no button.
+           * So route.
            */
-          switch(result){
-            case 0: $q.when(fromState.uiRouterYesNoCancel.yes()).then(proceed(fromState, toState, toParams)); break;
-            case 1: $q.when(fromState.uiRouterYesNoCancel.no()).then(proceed(fromState, toState, toParams)); break;
-          }
+          proceed(fromState, toState, toParams);
         },
         function(){
+          console.log('proceed: '+fromState.name);
           /* If dismissed, call the cancel functoin and then route back to previous state (only necessary for URL history). */
           $q.when(fromState.uiRouterYesNoCancel.cancel()).then(function(){$state.go(fromState, fromParams)});
         });
@@ -66,6 +80,19 @@
     this.$get = ['$state', '$rootScope', '$modal', '$urlRouter', function($state, $rootScope, $modal, $urlRouter){
       var setup = false;
       var self = this;
+      this.isRegistered = function(){
+        var state = state || $state.$current;
+        state = $state.get(state.name);
+        return !!state.uiRouterYesNoCancel;
+      };
+
+      this.unregister = function(state){
+        var state = state || $state.$current;
+        state = $state.get(state.name);
+
+        delete state.uiRouterYesNoCancel;
+        delete state.onEnter;
+      }
 
       this.setupState = function(fromState, condition, message, yes, no, cancel){
         fromState = fromState || $state.$current;
