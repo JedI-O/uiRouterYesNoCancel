@@ -5,6 +5,7 @@ Service module for ui.router, compatible with angular-bootstrap v. 1.3.2. Lets y
 * **ui-router:** ~0.2.15
 * **angular-bootstrap:** ~1.3.2
 * **bootstrap-css:** ~3.3.6
+
 # Usage:
 1. Add the following line in your bower.json file: `"ui-router-yesnocancel": "https://github.com/JedI-O/uiRouterYesNoCancel.git#master"`
 2. Execute `bower install`
