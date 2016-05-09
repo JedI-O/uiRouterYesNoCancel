@@ -6,7 +6,7 @@
     "Paul Podlech <podlech@daz-services.de>",
     "Stefan Behrendt <behrendt@daz-services.de>"
   ],
-  "description": "Service module for ui.router, compatible with angular-boostrap v. 1.3.2. Lets you watch for certain state changes, waits for confirmation and executes/routes depending on confirmation result.",
+  "description": "Service module for ui.router, compatible with angular-bootstrap v. 1.3.2. Lets you watch for certain state changes, waits for confirmation and executes/routes depending on confirmation result.",
   "main": "dist/uiRouterYesNoCancel.min.js",
   "moduleType": [
     "globals"
