@@ -6,7 +6,8 @@
    * Injecting uiRouterYesNoCancel service here
    * registers the registerList collected by the provider in config phase.
    */
-  yesNoCancel.run(['uiRouterYesNoCancel', '$rootScope', '$uibModal', '$state', '$q', function(a, $rootScope, $uibModal, $state, $q){
+  yesNoCancel.run(['uiRouterYesNoCancel', '$rootScope', '$uibModal', '$state', '$q',
+    function(a, $rootScope, $uibModal, $state, $q){
       var proceed = function(fromState, toState, toParams){
           fromState.uiRouterYesNoCancel.allowRouting = true; $state.go(toState, toParams);
       };
@@ -64,7 +65,7 @@
         },
         function(){
           console.log('proceed: '+fromState.name);
-          /* If dismissed, call the cancel functoin and then route back to previous state (only necessary for URL history). */
+          /* If dismissed, call the cancel function and then route back to previous state (only necessary for URL history). */
           $q.when(fromState.uiRouterYesNoCancel.cancel()).then(function(){$state.go(fromState, fromParams)});
         });
       });
@@ -75,7 +76,7 @@
 
     this.setupState = function(fromState, condition, message, yes, no, cancel){
       registerList.push(arguments);
-    }
+    };
 
     this.$get = ['$state', '$rootScope', '$uibModal', '$urlRouter', function($state, $rootScope, $uibModal, $urlRouter){
       var setup = false;
@@ -92,7 +93,7 @@
 
         delete state.uiRouterYesNoCancel;
         delete state.onEnter;
-      }
+      };
 
       this.setupState = function(fromState, condition, message, yes, no, cancel){
         fromState = fromState || $state.$current;
