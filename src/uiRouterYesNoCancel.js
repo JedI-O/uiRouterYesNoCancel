@@ -6,7 +6,7 @@
    * Injecting uiRouterYesNoCancel service here
    * registers the registerList collected by the provider in config phase.
    */
-  yesNoCancel.run(['uiRouterYesNoCancel', '$rootScope', '$modal', '$state', '$q', function(a, $rootScope, $modal, $state, $q){
+  yesNoCancel.run(['uiRouterYesNoCancel', '$rootScope', '$uibModal', '$state', '$q', function(a, $rootScope, $uibModal, $state, $q){
       var proceed = function(fromState, toState, toParams){
           fromState.uiRouterYesNoCancel.allowRouting = true; $state.go(toState, toParams);
       };
@@ -45,12 +45,12 @@
           scope.$close();
         });
 
-        /* set up the $modal  settings and open the modal*/
+        /* set up the $uibModal  settings and open the modal*/
         var modalHtml = '<div class="modal-body">{{message}}</div>'+
         '<div class="modal-footer"><button ng-disabled="disabled" class="btn btn-primary" ng-click="yes()">Yes</button>'+
         '<button ng-disabled="disabled" class="btn btn-primary" ng-click="no()">No</button><button class="btn btn-warning" ng-click="$dismiss()">Cancel</button></div>';
 
-        var modalInstance = $modal.open({
+        var modalInstance = $uibModal.open({
             template: modalHtml,
             controller: modalCtrl
           });
@@ -77,7 +77,7 @@
       registerList.push(arguments);
     }
 
-    this.$get = ['$state', '$rootScope', '$modal', '$urlRouter', function($state, $rootScope, $modal, $urlRouter){
+    this.$get = ['$state', '$rootScope', '$uibModal', '$urlRouter', function($state, $rootScope, $uibModal, $urlRouter){
       var setup = false;
       var self = this;
       this.isRegistered = function(){
