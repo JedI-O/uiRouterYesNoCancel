@@ -6,8 +6,8 @@
    * Injecting uiRouterYesNoCancel service here
    * registers the registerList collected by the provider in config phase.
    */
-  yesNoCancel.run(['uiRouterYesNoCancel', '$rootScope', '$uibModal', '$state', '$q',
-    function(a, $rootScope, $uibModal, $state, $q){
+  yesNoCancel.run(['uiRouterYesNoCancel', '$rootScope', '$uibModal', '$state', '$q','translate'
+    function(a, $rootScope, $uibModal, $state, $q,translate){
       var proceed = function(fromState, toState, toParams){
           fromState.uiRouterYesNoCancel.allowRouting = true; $state.go(toState, toParams);
       };
@@ -47,13 +47,19 @@
         });
 
         /* set up the $uibModal  settings and open the modal*/
-        var modalHtml = '<div class="modal-body">{{message}}</div>'+
-        '<div class="modal-footer"><button ng-disabled="disabled" class="btn btn-primary" ng-click="yes()">Yes</button>'+
-        '<button ng-disabled="disabled" class="btn btn-primary" ng-click="no()">No</button><button class="btn btn-warning" ng-click="$dismiss()">Cancel</button></div>';
+        var modalHtml = '<div class="modal-header">'+
+	'<h2 class="modal-title">{{"CONFIRM_PLZ"|translate}}</h2>'
+	'</div>'+
+	'<div class="modal-small-body">{{message}}</div>'+	
+        '<div class="modal-footer  modal-small-footer"><button class="btn btn-default" ng-click="$dismiss()">Cancel</button>'+
+	'<button ng-disabled="disabled" class="btn btn-warning" ng-click="no()" style="margin-left:25px">No</button>'+
+	'<button ng-disabled="disabled" class="btn btn-primary" ng-click="yes()" style="margin-left:25px">Yes</button>'+
+        '</div>';
 
         var modalInstance = $uibModal.open({
             template: modalHtml,
-            controller: modalCtrl
+            controller: modalCtrl,
+	    windowClass: 'modal-small-content'
           });
 
         /* the result promise is resolved when the modalInstance closes or is dismissed */
