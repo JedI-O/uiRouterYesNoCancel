@@ -6,7 +6,7 @@
    * Injecting uiRouterYesNoCancel service here
    * registers the registerList collected by the provider in config phase.
    */
-  yesNoCancel.run(['uiRouterYesNoCancel', '$rootScope', '$uibModal', '$state', '$q'
+  yesNoCancel.run(['uiRouterYesNoCancel', '$rootScope', '$uibModal', '$state', '$q',
     function(a, $rootScope, $uibModal, $state, $q){
       var proceed = function(fromState, toState, toParams){
           fromState.uiRouterYesNoCancel.allowRouting = true; $state.go(toState, toParams);
