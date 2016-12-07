@@ -28,8 +28,8 @@
           $scope.message = fromState.uiRouterYesNoCancel.message;
 	  $scope.title = fromState.uiRouterYesNoCancel.title;
 	  $scope.buttonYes = fromState.uiRouterYesNoCancel.buttonYes;
-	  $scope.buttonCancel = fromState.uiRouterYesNoCancel.buttonNo;
-	  $scope.buttonNo = fromState.uiRouterYesNoCancel.buttonCancel;
+	  $scope.buttonNo = fromState.uiRouterYesNoCancel.buttonNo;
+	  $scope.buttonCancel = fromState.uiRouterYesNoCancel.buttonCancel;
           scope=$scope;
           $scope.disabled = false;
           $scope.yes = function(){
