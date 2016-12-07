@@ -49,7 +49,7 @@
 
         /* set up the $uibModal  settings and open the modal*/
         var modalHtml = '<div class="modal-header">'+
-	'<h2 class="modal-title">{{title}}</h2>'
+	'<h2 class="modal-title">{{title}}</h2>'+
 	'</div>'+
 	'<div class="modal-small-body">{{message}}</div>'+	
         '<div class="modal-footer  modal-small-footer"><button class="btn btn-default" ng-click="$dismiss()">Cancel</button>'+
