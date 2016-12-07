@@ -6,8 +6,8 @@
    * Injecting uiRouterYesNoCancel service here
    * registers the registerList collected by the provider in config phase.
    */
-  yesNoCancel.run(['uiRouterYesNoCancel', '$rootScope', '$uibModal', '$state', '$q','translate'
-    function(a, $rootScope, $uibModal, $state, $q,translate){
+  yesNoCancel.run(['uiRouterYesNoCancel', '$rootScope', '$uibModal', '$state', '$q'
+    function(a, $rootScope, $uibModal, $state, $q){
       var proceed = function(fromState, toState, toParams){
           fromState.uiRouterYesNoCancel.allowRouting = true; $state.go(toState, toParams);
       };
@@ -26,6 +26,7 @@
 
         var modalCtrl = ['$scope', function($scope){
           $scope.message = fromState.uiRouterYesNoCancel.message;
+	  $scope.title = fromState.uiRouterYesNoCancel.title;
           scope=$scope;
           $scope.disabled = false;
           $scope.yes = function(){
@@ -48,7 +49,7 @@
 
         /* set up the $uibModal  settings and open the modal*/
         var modalHtml = '<div class="modal-header">'+
-	'<h2 class="modal-title">{{"CONFIRM_PLZ"|translate}}</h2>'
+	'<h2 class="modal-title">{{title}}</h2>'
 	'</div>'+
 	'<div class="modal-small-body">{{message}}</div>'+	
         '<div class="modal-footer  modal-small-footer"><button class="btn btn-default" ng-click="$dismiss()">Cancel</button>'+
@@ -80,7 +81,7 @@
   yesNoCancel.provider('uiRouterYesNoCancel', function(){
     var registerList = [];
 
-    this.setupState = function(fromState, condition, message, yes, no, cancel){
+    this.setupState = function(fromState, condition, message,title, yes, no, cancel){
       registerList.push(arguments);
     };
 
@@ -101,12 +102,13 @@
         delete state.onEnter;
       };
 
-      this.setupState = function(fromState, condition, message, yes, no, cancel){
+      this.setupState = function(fromState, condition, message,title, yes, no, cancel){
         fromState = fromState || $state.$current;
         fromState = $state.get(fromState.name);
         var noop = function(){};
         fromState.uiRouterYesNoCancel = {};
         fromState.uiRouterYesNoCancel.message = message || 'Do you want to save?';
+	fromState.uiRouterYesNoCancel.title = title || 'Are you Sure';
         fromState.uiRouterYesNoCancel.yes = yes || noop;
         fromState.uiRouterYesNoCancel.no = no || noop;
         fromState.uiRouterYesNoCancel.cancel = cancel || noop;
