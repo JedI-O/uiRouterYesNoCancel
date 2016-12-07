@@ -27,6 +27,9 @@
         var modalCtrl = ['$scope', function($scope){
           $scope.message = fromState.uiRouterYesNoCancel.message;
 	  $scope.title = fromState.uiRouterYesNoCancel.title;
+	  $scope.buttonYes = fromState.uiRouterYesNoCancel.buttonYes;
+	  $scope.buttonCancel = fromState.uiRouterYesNoCancel.buttonNo;
+	  $scope.buttonNo = fromState.uiRouterYesNoCancel.buttonCancel;
           scope=$scope;
           $scope.disabled = false;
           $scope.yes = function(){
@@ -52,9 +55,9 @@
 	'<h2 class="modal-title">{{title}}</h2>'+
 	'</div>'+
 	'<div class="modal-small-body">{{message}}</div>'+	
-        '<div class="modal-footer  modal-small-footer"><button class="btn btn-default" ng-click="$dismiss()">Cancel</button>'+
-	'<button ng-disabled="disabled" class="btn btn-danger" ng-click="no()" style="margin-left:25px">No</button>'+
-	'<button ng-disabled="disabled" class="btn btn-primary" ng-click="yes()" style="margin-left:25px">Yes</button>'+
+        '<div class="modal-footer  modal-small-footer"><button class="btn btn-default" ng-click="$dismiss()">{{buttonCancel}}</button>'+
+	'<button ng-disabled="disabled" class="btn btn-danger" ng-click="no()" style="margin-left:25px">{{buttonNo}}</button>'+
+	'<button ng-disabled="disabled" class="btn btn-primary" ng-click="yes()" style="margin-left:25px">{{buttonYes}}</button>'+
         '</div>';
 
         var modalInstance = $uibModal.open({
@@ -81,7 +84,7 @@
   yesNoCancel.provider('uiRouterYesNoCancel', function(){
     var registerList = [];
 
-    this.setupState = function(fromState, condition, message,title, yes, no, cancel){
+    this.setupState = function(fromState, condition, message, title, yes, no, cancel){
       registerList.push(arguments);
     };
 
@@ -102,13 +105,16 @@
         delete state.onEnter;
       };
 
-      this.setupState = function(fromState, condition, message,title, yes, no, cancel){
+      this.setupState = function(fromState, condition, message, yes, no, cancel){
         fromState = fromState || $state.$current;
         fromState = $state.get(fromState.name);
         var noop = function(){};
         fromState.uiRouterYesNoCancel = {};
-        fromState.uiRouterYesNoCancel.message = message || 'Do you want to save?';
-	fromState.uiRouterYesNoCancel.title = title || 'Are you Sure';
+        fromState.uiRouterYesNoCancel.message = message[0] || 'Do you want to save?';
+	fromState.uiRouterYesNoCancel.title = message[1] || 'Are you Sure';
+	fromState.uiRouterYesNoCancel.buttonYes = message[2] || 'Yes';
+	fromState.uiRouterYesNoCancel.buttonNo = message[3] || 'No';
+	fromState.uiRouterYesNoCancel.buttonCancel = message[4] || 'Cancel';
         fromState.uiRouterYesNoCancel.yes = yes || noop;
         fromState.uiRouterYesNoCancel.no = no || noop;
         fromState.uiRouterYesNoCancel.cancel = cancel || noop;
