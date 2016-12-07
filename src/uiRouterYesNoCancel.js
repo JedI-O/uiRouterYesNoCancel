@@ -53,7 +53,7 @@
 	'</div>'+
 	'<div class="modal-small-body">{{message}}</div>'+	
         '<div class="modal-footer  modal-small-footer"><button class="btn btn-default" ng-click="$dismiss()">Cancel</button>'+
-	'<button ng-disabled="disabled" class="btn btn-warning" ng-click="no()" style="margin-left:25px">No</button>'+
+	'<button ng-disabled="disabled" class="btn btn-danger" ng-click="no()" style="margin-left:25px">No</button>'+
 	'<button ng-disabled="disabled" class="btn btn-primary" ng-click="yes()" style="margin-left:25px">Yes</button>'+
         '</div>';
 
