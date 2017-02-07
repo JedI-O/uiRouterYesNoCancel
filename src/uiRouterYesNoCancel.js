@@ -22,20 +22,23 @@
         event.preventDefault();
 
         var scope;
-        var deferred = $q.defer();
+        var deferred = $q.defer(); //creation of a deferred with a state pending
 
         var modalCtrl = ['$scope', function($scope){
           $scope.message = fromState.uiRouterYesNoCancel.message;
-	  $scope.title = fromState.uiRouterYesNoCancel.title;
-	  $scope.buttonYes = fromState.uiRouterYesNoCancel.buttonYes;
-	  $scope.buttonNo = fromState.uiRouterYesNoCancel.buttonNo;
-	  $scope.buttonCancel = fromState.uiRouterYesNoCancel.buttonCancel;
-          scope=$scope;
+	      $scope.title = fromState.uiRouterYesNoCancel.title;
+          $scope.buttonYes = fromState.uiRouterYesNoCancel.buttonYes;
+	      $scope.buttonNo = fromState.uiRouterYesNoCancel.buttonNo;
+	      $scope.buttonCancel = fromState.uiRouterYesNoCancel.buttonCancel;
+          scope = $scope;
           $scope.disabled = false;
           $scope.yes = function(){
             $scope.disabled = true;
-            $q.when(fromState.uiRouterYesNoCancel.yes()).then(function(){
-              deferred.resolve();
+            $q.when(fromState.uiRouterYesNoCancel.yes()).then(function(data){
+              //resolve promise if yes() evaluates to true, undefined or null, else call $dismiss() to close modalInstance
+              if(data || typeof data === 'undefined' || data == null){
+                deferred.resolve(); //deferred state changed to resolved
+              } else deferred.$dismiss();
             });
           };
           $scope.no = function(){
@@ -47,24 +50,25 @@
         }];
 
         deferred.promise.then(function(){
+          //if yes returned false, do not close scope, but dismiss it (should we reject the deferred in this case?)
           scope.$close();
         });
 
         /* set up the $uibModal  settings and open the modal*/
         var modalHtml = '<div class="modal-header">'+
-	'<h2 class="modal-title">{{title}}</h2>'+
-	'</div>'+
-	'<div class="modal-small-body">{{message}}</div>'+	
-        '<div class="modal-footer  modal-small-footer"><button class="btn btn-default" ng-click="$dismiss()">{{buttonCancel}}</button>'+
-	'<button ng-disabled="disabled" class="btn btn-danger" ng-click="no()" style="margin-left:25px">{{buttonNo}}</button>'+
-	'<button ng-disabled="disabled" class="btn btn-primary" ng-click="yes()" style="margin-left:25px">{{buttonYes}}</button>'+
-        '</div>';
+	      '<h2 class="modal-title">{{title}}</h2>'+
+	      '</div>'+
+	      '<div class="modal-small-body">{{message}}</div>'+
+          '<div class="modal-footer  modal-small-footer"><button class="btn btn-default" ng-click="$dismiss()">{{buttonCancel}}</button>'+
+	      '<button ng-disabled="disabled" class="btn btn-danger" ng-click="no()" style="margin-left:25px">{{buttonNo}}</button>'+
+	      '<button ng-disabled="disabled" class="btn btn-primary" ng-click="yes()" style="margin-left:25px">{{buttonYes}}</button>'+
+          '</div>';
 
         var modalInstance = $uibModal.open({
             template: modalHtml,
             controller: modalCtrl,
-	    windowClass: 'modal-small-content'
-          });
+	        windowClass: 'modal-small-content'
+        });
 
         /* the result promise is resolved when the modalInstance closes or is dismissed */
         modalInstance.result.then(function(){
@@ -111,10 +115,10 @@
         var noop = function(){};
         fromState.uiRouterYesNoCancel = {};
         fromState.uiRouterYesNoCancel.message = message[0] || 'Do you want to save?';
-	fromState.uiRouterYesNoCancel.title = message[1] || 'Are you Sure';
-	fromState.uiRouterYesNoCancel.buttonYes = message[2] || 'Yes';
-	fromState.uiRouterYesNoCancel.buttonNo = message[3] || 'No';
-	fromState.uiRouterYesNoCancel.buttonCancel = message[4] || 'Cancel';
+	    fromState.uiRouterYesNoCancel.title = message[1] || 'Are you Sure';
+	    fromState.uiRouterYesNoCancel.buttonYes = message[2] || 'Yes';
+	    fromState.uiRouterYesNoCancel.buttonNo = message[3] || 'No';
+	    fromState.uiRouterYesNoCancel.buttonCancel = message[4] || 'Cancel';
         fromState.uiRouterYesNoCancel.yes = yes || noop;
         fromState.uiRouterYesNoCancel.no = no || noop;
         fromState.uiRouterYesNoCancel.cancel = cancel || noop;
