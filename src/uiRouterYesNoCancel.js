@@ -38,7 +38,7 @@
               //resolve promise if yes() evaluates to true, undefined or null, else call $dismiss() to close modalInstance
               if(data || typeof data === 'undefined' || data == null){
                 deferred.resolve(); //deferred state changed to resolved
-              } else deferred.$dismiss();
+              } else $scope.$dismiss();
             });
           };
           $scope.no = function(){
@@ -50,7 +50,6 @@
         }];
 
         deferred.promise.then(function(){
-          //if yes returned false, do not close scope, but dismiss it (should we reject the deferred in this case?)
           scope.$close();
         });
 
